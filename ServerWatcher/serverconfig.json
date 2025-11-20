@@ -1,0 +1,97 @@
+{
+  "Servers": [
+    {
+      "ServerName": "server1.example.com",
+      "Group": "GROUP1",
+      "Description": "Production Web Server - Main Application"
+    },
+    {
+      "ServerName": "server2.example.com",
+      "Group": "GROUP1",
+      "Description": "Production Web Server - Backup"
+    },
+    {
+      "ServerName": "server3.example.com",
+      "Group": "GROUP2",
+      "Description": "Database Server - Primary"
+    },
+    {
+      "ServerName": "192.168.1.100",
+      "Group": "GROUP2",
+      "Description": "Database Server - Secondary/Replica"
+    },
+    {
+      "ServerName": "server5.example.com",
+      "Group": "GROUP3",
+      "Description": "Development Environment Server"
+    },
+    {
+      "ServerName": "server6.example.com",
+      "Group": "GROUP1",
+      "Description": "API Gateway Server"
+    },
+    {
+      "ServerName": "server7.example.com",
+      "Group": "GROUP2",
+      "Description": "Cache Server - Redis"
+    },
+    {
+      "ServerName": "server8.example.com",
+      "Group": "GROUP3",
+      "Description": "Staging Environment Server"
+    },
+    {
+      "ServerName": "192.168.1.101",
+      "Group": "GROUP1",
+      "Description": "Load Balancer - Frontend"
+    },
+    {
+      "ServerName": "192.168.1.102",
+      "Group": "GROUP2",
+      "Description": "Monitoring Server - Prometheus"
+    },
+    {
+      "ServerName": "server11.example.com",
+      "Group": "GROUP3",
+      "Description": "CI/CD Build Server"
+    },
+    {
+      "ServerName": "server12.example.com",
+      "Group": "GROUP1",
+      "Description": "File Storage Server"
+    },
+    {
+      "ServerName": "server13.example.com",
+      "Group": "GROUP2",
+      "Description": "Message Queue Server - RabbitMQ"
+    },
+    {
+      "ServerName": "server14.example.com",
+      "Group": "GROUP3",
+      "Description": "Testing Environment Server"
+    },
+    {
+      "ServerName": "server15.example.com",
+      "Group": "GROUP1",
+      "Description": "Backup Server - Daily Snapshots"
+    }
+  ],
+  "CredentialGroups": [
+    {
+      "GroupName": "GROUP1",
+      "LoginName": "admin",
+      "Password": "ENCRYPTED_PASSWORD_HERE"
+    },
+    {
+      "GroupName": "GROUP2",
+      "LoginName": "root",
+      "Password": "ENCRYPTED_PASSWORD_HERE"
+    },
+    {
+      "GroupName": "GROUP3",
+      "LoginName": "user",
+      "Password": "ENCRYPTED_PASSWORD_HERE"
+    }
+  ]
+}
+

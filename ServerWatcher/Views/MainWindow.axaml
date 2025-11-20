@@ -1,0 +1,150 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ServerWatcher.ViewModels"
+        xmlns:models="using:ServerWatcher.Models"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+        x:Class="ServerWatcher.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        x:Name="MainWin"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Server Watcher - SSH Connection Monitor"
+        Width="900" Height="600">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Ellipse.statusLight">
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="StrokeThickness" Value="2"/>
+            <Setter Property="Stroke" Value="#333333"/>
+        </Style>
+
+        <Style Selector="Ellipse.unknown">
+            <Setter Property="Fill" Value="#CCCCCC"/>
+        </Style>
+
+        <Style Selector="Ellipse.connecting">
+            <Setter Property="Fill" Value="#FFA500"/>
+        </Style>
+
+        <Style Selector="Ellipse.success">
+            <Setter Property="Fill" Value="#00FF00"/>
+        </Style>
+
+        <Style Selector="Ellipse.failed">
+            <Setter Property="Fill" Value="#FF0000"/>
+        </Style>
+    </Window.Styles>
+
+    <DockPanel Margin="20">
+        <StackPanel DockPanel.Dock="Top" Spacing="10" Margin="0,0,0,20">
+            <TextBlock Text="SSH Server Connection Monitor"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="15">
+                <Button Content="Test All Connections"
+                        Command="{Binding TestAllConnectionsCommand}"
+                        Padding="20,10"
+                        FontSize="16"
+                        IsEnabled="{Binding !IsTesting}"/>
+
+                <Button Content="Encrypt Password"
+                        Command="{Binding OpenPasswordEncryptionCommand}"
+                        Padding="20,10"
+                        FontSize="16"/>
+
+                <Border Width="2" Background="#CCCCCC" Margin="10,0"/>
+
+                <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <TextBlock Text="FontSize:" VerticalAlignment="Center" FontSize="14"/>
+                    <Slider Width="150"
+                            Minimum="8"
+                            Maximum="24"
+                            Value="{Binding FontSize}"
+                            TickFrequency="1"
+                            IsSnapToTickEnabled="True"
+                            VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding FontSize}"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               MinWidth="30"
+                               TextAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock Text="{Binding StatusText}"
+                       HorizontalAlignment="Center"
+                       FontStyle="Italic"
+                       Foreground="#666666"/>
+        </StackPanel>
+
+        <Border BorderBrush="#CCCCCC"
+                BorderThickness="1"
+                CornerRadius="5"
+                Padding="10">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Servers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:ServerStatus">
+                            <Border BorderBrush="#EEEEEE"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="10"
+                                    Margin="0,5">
+                                <Grid ColumnDefinitions="40,*,150,*">
+                                    <Ellipse Grid.Column="0"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             Classes="statusLight"
+                                             Classes.unknown="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Unknown}}"
+                                             Classes.connecting="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Connecting}}"
+                                             Classes.success="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Success}}"
+                                             Classes.failed="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Failed}}"/>
+
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Spacing="5">
+                                        <TextBlock Text="{Binding ServerName}"
+                                                   FontWeight="Bold"
+                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
+                                                   Foreground="#444444"
+                                                   TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding Group, StringFormat='Group: {0}'}"
+                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
+                                                   Foreground="#666666"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding Status}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               FontWeight="SemiBold"
+                                               FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+
+                                    <TextBlock Grid.Column="3"
+                                               Text="{Binding StatusMessage}"
+                                               VerticalAlignment="Center"
+                                               Margin="20,0,0,0"
+                                               TextWrapping="Wrap"
+                                               FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </DockPanel>
+
+</Window>
