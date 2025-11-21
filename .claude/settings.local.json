@@ -6,7 +6,9 @@
       "Bash(dotnet build:*)",
       "Bash(dir publishwin-x64ServerWatcher.exe)",
       "Bash(dotnet publish:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(dir:*)",
+      "Bash(powershell \"Get-Item ''publish\\win-x64\\ServerWatcher.exe'' | Select-Object Name, Length, LastWriteTime\")"
     ],
     "deny": [],
     "ask": []

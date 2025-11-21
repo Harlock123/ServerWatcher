@@ -53,6 +53,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     ServerName = server.ServerName,
                     Group = server.Group,
                     Description = server.Description,
+                    Path = server.Path,
                     Status = ConnectionStatus.Unknown,
                     StatusMessage = "Not tested"
                 });
@@ -128,5 +129,44 @@ public partial class MainWindowViewModel : ViewModelBase
 
         var dialog = new PasswordEncryptionWindow();
         await dialog.ShowDialog(_mainWindow);
+    }
+
+    [RelayCommand]
+    private async Task OpenFileBrowser(ServerStatus serverStatus)
+    {
+        if (_mainWindow == null || _configuration == null)
+            return;
+
+        var serverConfig = _configuration.Servers.FirstOrDefault(s => s.ServerName == serverStatus.ServerName);
+        if (serverConfig == null)
+        {
+            StatusText = "Server configuration not found";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(serverConfig.Path))
+        {
+            StatusText = $"No path configured for {serverStatus.ServerName}";
+            return;
+        }
+
+        var credentialGroup = _configuration.CredentialGroups.FirstOrDefault(g => g.GroupName == serverConfig.Group);
+        if (credentialGroup == null)
+        {
+            StatusText = $"Credential group '{serverConfig.Group}' not found";
+            return;
+        }
+
+        var dialog = new FileBrowserWindow
+        {
+            DataContext = new FileBrowserViewModel()
+        };
+
+        var viewModel = (FileBrowserViewModel)dialog.DataContext;
+        viewModel.SetWindow(dialog);
+
+        dialog.Show();
+
+        await viewModel.LoadFilesAsync(serverConfig, credentialGroup);
     }
 }

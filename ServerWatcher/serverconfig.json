@@ -3,37 +3,44 @@
     {
       "ServerName": "server1.example.com",
       "Group": "GROUP1",
-      "Description": "Production Web Server - Main Application"
+      "Description": "Production Web Server - Main Application",
+      "Path": "/var/www/html"
     },
     {
       "ServerName": "server2.example.com",
       "Group": "GROUP1",
-      "Description": "Production Web Server - Backup"
+      "Description": "Production Web Server - Backup",
+      "Path": "/var/www/html"
     },
     {
       "ServerName": "server3.example.com",
       "Group": "GROUP2",
-      "Description": "Database Server - Primary"
+      "Description": "Database Server - Primary",
+      "Path": "/var/lib/mysql"
     },
     {
       "ServerName": "192.168.1.100",
       "Group": "GROUP2",
-      "Description": "Database Server - Secondary/Replica"
+      "Description": "Database Server - Secondary/Replica",
+      "Path": "/var/lib/mysql"
     },
     {
       "ServerName": "server5.example.com",
       "Group": "GROUP3",
-      "Description": "Development Environment Server"
+      "Description": "Development Environment Server",
+      "Path": "/home/user/projects"
     },
     {
       "ServerName": "server6.example.com",
       "Group": "GROUP1",
-      "Description": "API Gateway Server"
+      "Description": "API Gateway Server",
+      "Path": "/var/log/nginx"
     },
     {
       "ServerName": "server7.example.com",
       "Group": "GROUP2",
-      "Description": "Cache Server - Redis"
+      "Description": "Cache Server - Redis",
+      "Path": "/var/lib/redis"
     },
     {
       "ServerName": "server8.example.com",

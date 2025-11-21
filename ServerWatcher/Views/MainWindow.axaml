@@ -115,7 +115,9 @@
                                                 Spacing="5">
                                         <TextBlock Text="{Binding ServerName}"
                                                    FontWeight="Bold"
-                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
+                                                   Cursor="Hand"
+                                                   DoubleTapped="ServerName_OnDoubleTapped"/>
                                         <TextBlock Text="{Binding Description}"
                                                    FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
                                                    Foreground="#444444"
