@@ -8,7 +8,9 @@
       "Bash(dotnet publish:*)",
       "Bash(cat:*)",
       "Bash(dir:*)",
-      "Bash(powershell \"Get-Item ''publish\\win-x64\\ServerWatcher.exe'' | Select-Object Name, Length, LastWriteTime\")"
+      "Bash(powershell \"Get-Item ''publish\\win-x64\\ServerWatcher.exe'' | Select-Object Name, Length, LastWriteTime\")",
+      "Bash(powershell \"Get-Item ''publish/win-x64/ServerWatcher.exe'' | Select-Object Name, Length, LastWriteTime\")",
+      "Bash(powershell \"Get-Item ''publish/win-x64/ServerWatcher.exe'' | Select-Object Name, @{N=''Size(MB)'';E={[math]::Round($_Length/1MB,2)}}, LastWriteTime\")"
     ],
     "deny": [],
     "ask": []

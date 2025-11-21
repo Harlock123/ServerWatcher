@@ -100,46 +100,89 @@
                                     BorderThickness="0,0,0,1"
                                     Padding="10"
                                     Margin="0,5">
-                                <Grid ColumnDefinitions="40,*,150,*">
-                                    <Ellipse Grid.Column="0"
-                                             HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"
-                                             Classes="statusLight"
-                                             Classes.unknown="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Unknown}}"
-                                             Classes.connecting="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Connecting}}"
-                                             Classes.success="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Success}}"
-                                             Classes.failed="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Failed}}"/>
+                                <Grid RowDefinitions="Auto,Auto">
+                                    <!-- SSH Status Row -->
+                                    <Grid Grid.Row="0" ColumnDefinitions="40,*,150,*">
+                                        <Ellipse Grid.Column="0"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Classes="statusLight"
+                                                 Classes.unknown="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Unknown}}"
+                                                 Classes.connecting="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Connecting}}"
+                                                 Classes.success="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Success}}"
+                                                 Classes.failed="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Failed}}"/>
 
-                                    <StackPanel Grid.Column="1"
-                                                VerticalAlignment="Center"
-                                                Spacing="5">
-                                        <TextBlock Text="{Binding ServerName}"
-                                                   FontWeight="Bold"
-                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
-                                                   Cursor="Hand"
-                                                   DoubleTapped="ServerName_OnDoubleTapped"/>
-                                        <TextBlock Text="{Binding Description}"
-                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
-                                                   Foreground="#444444"
-                                                   TextWrapping="Wrap"/>
-                                        <TextBlock Text="{Binding Group, StringFormat='Group: {0}'}"
+                                        <StackPanel Grid.Column="1"
+                                                    VerticalAlignment="Center"
+                                                    Spacing="5">
+                                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                                <TextBlock Text="{Binding ServerName}"
+                                                           FontWeight="Bold"
+                                                           FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
+                                                           Cursor="Hand"
+                                                           DoubleTapped="ServerName_OnDoubleTapped"/>
+                                                <TextBlock Text="{Binding IpAddress, StringFormat='({0})'}"
+                                                           FontWeight="SemiBold"
+                                                           FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
+                                                           Foreground="#0066CC"
+                                                           IsVisible="{Binding IpAddress, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Description}"
+                                                       FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
+                                                       Foreground="#444444"
+                                                       TextWrapping="Wrap"/>
+                                            <TextBlock Text="{Binding Group, StringFormat='Group: {0}'}"
+                                                       FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
+                                                       Foreground="#666666"/>
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding Status}"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Right"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+
+                                        <TextBlock Grid.Column="3"
+                                                   Text="{Binding StatusMessage}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="20,0,0,0"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+                                    </Grid>
+
+                                    <!-- Website Status Row (only shown if WebSite is configured) -->
+                                    <Grid Grid.Row="1" ColumnDefinitions="40,*,150,*" Margin="0,5,0,0"
+                                          IsVisible="{Binding WebSite, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                        <Ellipse Grid.Column="0"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Classes="statusLight"
+                                                 Classes.unknown="{Binding WebSiteStatus, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Unknown}}"
+                                                 Classes.connecting="{Binding WebSiteStatus, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Connecting}}"
+                                                 Classes.success="{Binding WebSiteStatus, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Success}}"
+                                                 Classes.failed="{Binding WebSiteStatus, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Failed}}"/>
+
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding WebSite, StringFormat='Web: {0}'}"
+                                                   VerticalAlignment="Center"
                                                    FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
                                                    Foreground="#666666"/>
-                                    </StackPanel>
 
-                                    <TextBlock Grid.Column="2"
-                                               Text="{Binding Status}"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Right"
-                                               FontWeight="SemiBold"
-                                               FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding WebSiteStatus}"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Right"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
 
-                                    <TextBlock Grid.Column="3"
-                                               Text="{Binding StatusMessage}"
-                                               VerticalAlignment="Center"
-                                               Margin="20,0,0,0"
-                                               TextWrapping="Wrap"
-                                               FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+                                        <TextBlock Grid.Column="3"
+                                                   Text="{Binding WebSiteStatusMessage}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="20,0,0,0"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+                                    </Grid>
                                 </Grid>
                             </Border>
                         </DataTemplate>

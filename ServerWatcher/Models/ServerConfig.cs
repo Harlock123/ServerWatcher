@@ -6,4 +6,5 @@ public class ServerConfig
     public string Group { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
+    public string? WebSite { get; set; }
 }
