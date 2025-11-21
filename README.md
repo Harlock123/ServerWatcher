@@ -6,7 +6,10 @@ An Avalonia-based .NET 9 desktop application that monitors SSH connectivity to m
 
 - Configure multiple servers with associated credential groups
 - Test SSH connectivity to all configured servers
+- **Website monitoring** - Optional HTTP/HTTPS endpoint monitoring for each server
+- **Automatic IP resolution** - Displays resolved IP addresses next to hostnames
 - Visual status indicators (red/green/orange lights) for each server connection state
+- Dual status display: SSH connectivity + website availability
 - Real-time connection status updates
 - **Password encryption tool** - Built-in utility to encrypt passwords for secure storage
 - **Encrypted password support** - Automatically decrypts passwords from config file at runtime
@@ -25,12 +28,22 @@ The application reads from a `serverconfig.json` file that must be placed in the
     {
       "ServerName": "server1.example.com",
       "Group": "GROUP1",
-      "Description": "Production Web Server - Main Application"
+      "Description": "Production Web Server - Main Application",
+      "Path": "/var/www/html",
+      "WebSite": "https://server1.example.com"
     },
     {
       "ServerName": "192.168.1.100",
       "Group": "GROUP2",
-      "Description": "Database Server - Primary"
+      "Description": "Database Server - Primary",
+      "Path": "/var/lib/mysql"
+    },
+    {
+      "ServerName": "api.example.com",
+      "Group": "GROUP1",
+      "Description": "API Server",
+      "Path": "/opt/api",
+      "WebSite": "https://api.example.com:8443/health"
     }
   ],
   "CredentialGroups": [
@@ -51,9 +64,11 @@ The application reads from a `serverconfig.json` file that must be placed in the
 ### Configuration Elements
 
 - **Servers**: List of servers to monitor
-  - `ServerName`: Hostname or IP address of the server
+  - `ServerName`: Hostname or IP address of the server (hostnames will show resolved IP in blue)
   - `Group`: Reference to the credential group to use (e.g., "GROUP1", "GROUP2")
   - `Description`: Optional descriptive label for the server (displayed in the UI)
+  - `Path`: Optional file system path for file browsing functionality
+  - `WebSite`: Optional HTTP/HTTPS URL to monitor (supports custom ports, e.g., "https://server.com:8443/health")
 
 - **CredentialGroups**: List of credential sets
   - `GroupName`: Unique identifier for the credential group
@@ -130,12 +145,25 @@ The published executable will be in the `publish/[platform]` directory along wit
 
 1. Edit the `serverconfig.json` file with your servers and credentials
 2. Launch the application
-3. Click the "Test All Connections" button to test SSH connectivity
-4. View the status indicators:
+3. Click the "Test All Connections" button to test SSH connectivity and website availability
+4. View the status indicators for each server:
+
+#### SSH Status (First Row)
    - **Gray**: Not tested
    - **Orange**: Connecting
    - **Green**: Successfully connected
    - **Red**: Connection failed
+
+#### Website Status (Second Row - only shown if WebSite is configured)
+   - **Gray**: Not tested or no website configured
+   - **Orange**: Checking website
+   - **Green**: Website responding (HTTP 200-299)
+   - **Red**: Website unreachable or error response
+
+#### IP Address Display
+   - Hostnames automatically display their resolved IP address in blue next to the server name
+   - Example: `server1.example.com (192.168.1.100)`
+   - If the ServerName is already an IP address, no additional IP is shown
 
 ### Password Encryption
 
@@ -184,14 +212,15 @@ ServerWatcher/
 │   ├── AppConfiguration.cs      # Configuration data model
 │   ├── ServerConfig.cs          # Server configuration
 │   ├── CredentialGroup.cs       # Credential group configuration
-│   └── ServerStatus.cs          # Runtime server status
+│   └── ServerStatus.cs          # Runtime server status (SSH + website status)
 ├── Services/
 │   ├── ConfigurationService.cs  # Configuration file loader
-│   └── SshConnectionService.cs  # SSH connectivity tester
+│   ├── SshConnectionService.cs  # SSH connectivity tester
+│   └── WebsiteCheckService.cs   # HTTP/HTTPS website checker
 ├── ViewModels/
-│   └── MainWindowViewModel.cs   # Main window logic
+│   └── MainWindowViewModel.cs   # Main window logic with DNS resolution
 ├── Views/
-│   └── MainWindow.axaml         # Main window UI
+│   └── MainWindow.axaml         # Main window UI with dual status indicators
 └── serverconfig.json            # Configuration file
 ```
 
