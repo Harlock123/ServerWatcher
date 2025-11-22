@@ -7,6 +7,7 @@ An Avalonia-based .NET 9 desktop application that monitors SSH connectivity to m
 - Configure multiple servers with associated credential groups
 - Test SSH connectivity to all configured servers
 - **Website monitoring** - Optional HTTP/HTTPS endpoint monitoring for each server
+- **Open in Browser** - Quick-launch button to open configured websites in system default browser
 - **Automatic IP resolution** - Displays resolved IP addresses next to hostnames
 - Visual status indicators (red/green/orange lights) for each server connection state
 - Dual status display: SSH connectivity + website availability
@@ -159,6 +160,9 @@ The published executable will be in the `publish/[platform]` directory along wit
    - **Orange**: Checking website
    - **Green**: Website responding (HTTP 200-299)
    - **Red**: Website unreachable or error response
+   - **Open in Browser button**: Click to launch the configured website in your system's default web browser
+     - This button is only visible for servers that have a website URL configured
+     - Opens the exact URL configured in the `WebSite` field
 
 #### IP Address Display
    - Hostnames automatically display their resolved IP address in blue next to the server name
