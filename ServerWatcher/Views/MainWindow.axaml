@@ -163,11 +163,21 @@
                                                  Classes.success="{Binding WebSiteStatus, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Success}}"
                                                  Classes.failed="{Binding WebSiteStatus, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ConnectionStatus.Failed}}"/>
 
-                                        <TextBlock Grid.Column="1"
-                                                   Text="{Binding WebSite, StringFormat='Web: {0}'}"
-                                                   VerticalAlignment="Center"
-                                                   FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
-                                                   Foreground="#666666"/>
+                                        <StackPanel Grid.Column="1"
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Center"
+                                                    Spacing="10">
+                                            <TextBlock Text="{Binding WebSite, StringFormat='Web: {0}'}"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"
+                                                       Foreground="#666666"/>
+                                            <Button Content="Open in Browser"
+                                                    Command="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).OpenWebsiteCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Padding="8,4"
+                                                    FontSize="12"
+                                                    VerticalAlignment="Center"/>
+                                        </StackPanel>
 
                                         <TextBlock Grid.Column="2"
                                                    Text="{Binding WebSiteStatus}"

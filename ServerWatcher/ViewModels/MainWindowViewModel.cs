@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -188,6 +189,28 @@ public partial class MainWindowViewModel : ViewModelBase
         dialog.Show();
 
         await viewModel.LoadFilesAsync(serverConfig, credentialGroup);
+    }
+
+    [RelayCommand]
+    private void OpenWebsite(ServerStatus serverStatus)
+    {
+        if (string.IsNullOrWhiteSpace(serverStatus.WebSite))
+            return;
+
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = serverStatus.WebSite,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+            StatusText = $"Opening {serverStatus.WebSite} in browser...";
+        }
+        catch (Exception ex)
+        {
+            StatusText = $"Error opening website: {ex.Message}";
+        }
     }
 
     private async Task<string> ResolveIpAddressAsync(string hostname)
