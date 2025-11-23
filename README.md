@@ -6,6 +6,7 @@ An Avalonia-based .NET 9 desktop application that monitors SSH connectivity to m
 
 - Configure multiple servers with associated credential groups
 - Test SSH connectivity to all configured servers
+- **Individual server retest** - Retest button for each server to quickly verify a single connection
 - **Website monitoring** - Optional HTTP/HTTPS endpoint monitoring for each server
 - **Open in Browser** - Quick-launch button to open configured websites in system default browser
 - **Automatic IP resolution** - Displays resolved IP addresses next to hostnames
@@ -14,6 +15,7 @@ An Avalonia-based .NET 9 desktop application that monitors SSH connectivity to m
 - Real-time connection status updates
 - **Password encryption tool** - Built-in utility to encrypt passwords for secure storage
 - **Encrypted password support** - Automatically decrypts passwords from config file at runtime
+- **Adjustable font size** - Slider control to customize text size (8-24pt, default 12pt)
 - Scrollable server list to accommodate any number of servers
 - Cross-platform support (Windows, Linux, macOS)
 
@@ -147,7 +149,9 @@ The published executable will be in the `publish/[platform]` directory along wit
 1. Edit the `serverconfig.json` file with your servers and credentials
 2. Launch the application
 3. Click the "Test All Connections" button to test SSH connectivity and website availability
-4. View the status indicators for each server:
+4. Use the "Retest" button next to any server to quickly retest just that specific server
+5. Adjust font size using the slider control in the top toolbar (8-24pt range, default 12pt)
+6. View the status indicators for each server:
 
 #### SSH Status (First Row)
    - **Gray**: Not tested
@@ -168,6 +172,24 @@ The published executable will be in the `publish/[platform]` directory along wit
    - Hostnames automatically display their resolved IP address in blue next to the server name
    - Example: `server1.example.com (192.168.1.100)`
    - If the ServerName is already an IP address, no additional IP is shown
+
+### Individual Server Retest
+
+Each server in the list has a dedicated "Retest" button that allows you to quickly verify a specific server's connectivity without having to retest all servers:
+
+1. Locate the server you want to retest in the list
+2. Click the "Retest" button on the right side of that server's status display
+3. The application will:
+   - Test the SSH connection for that server only
+   - Test the website status if a website is configured
+   - Update both status indicators for that server
+   - Display progress in the status bar at the bottom
+
+This is particularly useful when:
+- Troubleshooting connection issues with a specific server
+- Verifying that configuration changes worked for one server
+- Quickly checking if a temporarily down server is back online
+- Avoiding the wait time of retesting all servers when you only need to verify one
 
 ### Password Encryption
 

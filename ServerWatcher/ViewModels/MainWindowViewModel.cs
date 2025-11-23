@@ -31,7 +31,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private string _statusText = "Ready";
 
     [ObservableProperty]
-    private double _fontSize = 14;
+    private double _fontSize = 12;
 
     public MainWindowViewModel()
     {
@@ -135,6 +135,54 @@ public partial class MainWindowViewModel : ViewModelBase
 
         StatusText = $"Complete: {successCount}/{testedCount} servers connected successfully";
         IsTesting = false;
+    }
+
+    [RelayCommand]
+    private async Task TestSingleConnection(ServerStatus serverStatus)
+    {
+        if (_configuration == null || serverStatus == null)
+            return;
+
+        StatusText = $"Testing {serverStatus.ServerName}...";
+
+        serverStatus.Status = ConnectionStatus.Connecting;
+        serverStatus.StatusMessage = "Connecting...";
+
+        var serverConfig = _configuration.Servers.FirstOrDefault(s => s.ServerName == serverStatus.ServerName);
+        if (serverConfig == null)
+        {
+            serverStatus.Status = ConnectionStatus.Failed;
+            serverStatus.StatusMessage = "Server configuration not found";
+            StatusText = $"Failed to test {serverStatus.ServerName}: configuration not found";
+            return;
+        }
+
+        var credentialGroup = _configuration.CredentialGroups.FirstOrDefault(g => g.GroupName == serverConfig.Group);
+        if (credentialGroup == null)
+        {
+            serverStatus.Status = ConnectionStatus.Failed;
+            serverStatus.StatusMessage = $"Credential group '{serverConfig.Group}' not found";
+            StatusText = $"Failed to test {serverStatus.ServerName}: credential group not found";
+            return;
+        }
+
+        var (success, message) = await _sshService.TestConnectionAsync(serverConfig, credentialGroup);
+
+        serverStatus.Status = success ? ConnectionStatus.Success : ConnectionStatus.Failed;
+        serverStatus.StatusMessage = message;
+
+        // Test website if configured
+        if (!string.IsNullOrWhiteSpace(serverStatus.WebSite))
+        {
+            serverStatus.WebSiteStatus = ConnectionStatus.Connecting;
+            serverStatus.WebSiteStatusMessage = "Checking...";
+
+            var (webSuccess, webMessage) = await _websiteService.CheckWebsiteAsync(serverStatus.WebSite);
+            serverStatus.WebSiteStatus = webSuccess ? ConnectionStatus.Success : ConnectionStatus.Failed;
+            serverStatus.WebSiteStatusMessage = webMessage;
+        }
+
+        StatusText = $"Test complete: {serverStatus.ServerName} - {(success ? "Success" : "Failed")}";
     }
 
     public void SetMainWindow(Window window)

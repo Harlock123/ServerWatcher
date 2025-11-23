@@ -10,7 +10,7 @@
         x:Name="MainWin"
         Icon="/Assets/avalonia-logo.ico"
         Title="Server Watcher - SSH Connection Monitor"
-        Width="900" Height="600">
+        Width="1100" Height="600">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -102,7 +102,7 @@
                                     Margin="0,5">
                                 <Grid RowDefinitions="Auto,Auto">
                                     <!-- SSH Status Row -->
-                                    <Grid Grid.Row="0" ColumnDefinitions="40,*,150,*">
+                                    <Grid Grid.Row="0" ColumnDefinitions="40,*,150,*,Auto">
                                         <Ellipse Grid.Column="0"
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
@@ -149,6 +149,15 @@
                                                    Margin="20,0,0,0"
                                                    TextWrapping="Wrap"
                                                    FontSize="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).FontSize}"/>
+
+                                        <Button Grid.Column="4"
+                                                Content="Retest"
+                                                Command="{Binding #MainWin.((vm:MainWindowViewModel)DataContext).TestSingleConnectionCommand}"
+                                                CommandParameter="{Binding}"
+                                                Padding="10,5"
+                                                FontSize="12"
+                                                Margin="10,0,0,0"
+                                                VerticalAlignment="Center"/>
                                     </Grid>
 
                                     <!-- Website Status Row (only shown if WebSite is configured) -->
